@@ -11,6 +11,7 @@
 #' @import glue
 #' @import htmltools
 #' @import tidyr
+#' @import rlang
 #' @export
 inexact_gadget <- function() {
   # Function to allow selectize plugins

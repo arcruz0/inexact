@@ -8,5 +8,5 @@ Description: The package allows to supervise a fuzzy join, via an RStudio Addin.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Depends: rstudioapi, dplyr, stringr, purrr, fuzzyjoin, glue, shiny, miniUI, htmltools, tidyr
+Imports: rstudioapi, rlang, dplyr, stringr, purrr, fuzzyjoin, glue, shiny, miniUI, htmltools, tidyr
 RoxygenNote: 6.1.1
