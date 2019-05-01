@@ -16,3 +16,6 @@ vignettes/*.pdf
 .httr-oauth
 
 .Rbuildignore
+
+test.R
+.Rporj
