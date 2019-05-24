@@ -5,6 +5,7 @@
 #' @import shiny
 #' @import rstudioapi
 #' @import miniUI
+#' @import dplyr
 #' @import stringr
 #' @import purrr
 #' @import fuzzyjoin

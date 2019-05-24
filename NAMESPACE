@@ -2,6 +2,7 @@
 
 export(inexact_gadget)
 export(trust_join)
+import(dplyr)
 import(fuzzyjoin)
 import(glue)
 import(htmltools)
