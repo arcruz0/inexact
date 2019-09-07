@@ -1,12 +1,28 @@
 Package: inexact
 Type: Package
 Title: inexact: fuzzy join supervisor
-Version: 0.0.1
-Author: Andrés Cruz
-Maintainer: Andrés Cruz <arcruz@uc.cl>
+Version: 0.0.2
+Authors@R: 
+    person(given = "Andrés",
+           family = "Cruz",
+           role = c("aut", "cre"),
+           email = "arcruz@uc.cl")
 Description: The package allows to supervise a fuzzy join, via an RStudio Addin.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: rstudioapi, rlang, dplyr, stringr, purrr, fuzzyjoin, glue, shiny, miniUI, htmltools, tidyr
+Imports: 
+        dplyr,
+        tidyr,
+        purrr,
+        stringr,
+        glue,
+        shiny,
+        miniUI,
+        htmltools,
+        htmlwidgets,
+        DT,
+        stringdist,
+        fuzzyjoin,
+        rlang
 RoxygenNote: 6.1.1
