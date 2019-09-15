@@ -119,9 +119,9 @@ inexact_gadget <- function() {
             glue::glue(
               "
 
-              ---------------------------------------- inexact output
+              ------------------------------------- inexact output
               {stringr::str_replace_all(.code_text, '&nbsp;', ' ')}
-              ----------------------------------------
+              -------------------------------------
               "
             )
           )
@@ -233,7 +233,7 @@ inexact_gadget <- function() {
         "dplyr::distinct(dplyr::select(", y, ", ", by, "))")))
       y <- y[[by]]
       
-      x <- x[!(x == y)]
+      x <- x[!(x %in% y)]
       
       if (identical(x, character(0))){
         return(NULL)
@@ -274,24 +274,21 @@ inexact_gadget <- function() {
                        input$num_choices)
     })
     
-    # Create the DT with matches, for the review process
-    output$ui_df_matches <- DT::renderDataTable(
+    f_df_datatable_inicial <- function(with_id){
       if (shiny::isTruthy(input$df_x) & shiny::isTruthy(input$df_x)) {
         
-        # Load the df with suggested matches
         w_list_matches <- r_w_list_matches()
         
         if (is.null(w_list_matches) == T){
           NULL
         } else {
+          values_to_show <- purrr::map(w_list_matches, ~ .x[["matrix_show"]])
+          
           df_datatable <- data.frame(
             id_1 = names(w_list_matches),
             id_2 = purrr::map2_chr(
-              .x = stringr::str_c(
-                "review_",
-                1:length(w_list_matches)
-              ),
-              .y = purrr::map(w_list_matches, ~ .x[["matrix_show"]]),
+              .x = stringr::str_c("review_", 1:length(w_list_matches)),
+              .y = values_to_show,
               .f = ~ as.character(
                 htmltools::div(
                   shiny::selectizeInput(inputId = .x,
@@ -305,19 +302,64 @@ inexact_gadget <- function() {
             stringsAsFactors = F
           )
           
-          DT::datatable(
-            df_datatable,
-            escape = FALSE, selection = "none",
-            colnames = c("ID from x", "ID from y?"),
-            options = list(
-              pageLength      = 5,
-              searching       = FALSE,
-              language.emptyTable = "Empty Table",
-              # https://github.com/rstudio/shiny/issues/1246
-              preDrawCallback = htmlwidgets::JS('function() { Shiny.unbindAll(this.api().table().node());}'),
-              drawCallback    = htmlwidgets::JS('function() { Shiny.bindAll(this.api().table().node()); } '))) %>%
-            DT::formatStyle(0, lineHeight='20%')
+          if (with_id == T) {
+            df_datatable$input_id <- map_chr(values_to_show, ~ .x[[1]])
+            message(map_chr(values_to_show, ~ .x[[1]]))
+          }
+          
+          return(df_datatable)
         }
+      }
+    }
+    
+    
+    
+    # Create the DT with matches, for the review process
+    output$ui_df_matches <- DT::renderDataTable(
+      if (shiny::isTruthy(input$df_x) & shiny::isTruthy(input$df_x)) {
+        
+        # Load the df with suggested matches
+        
+        message("Cargando datos iniciales para DT")
+        df_datatable <- f_df_datatable_inicial(with_id = F)
+        
+        # if (is.null(w_list_matches) == T){
+        #   NULL
+        # } else {
+        #   df_datatable <- data.frame(
+        #     id_1 = names(w_list_matches),
+        #     id_2 = purrr::map2_chr(
+        #       .x = stringr::str_c(
+        #         "review_",
+        #         1:length(w_list_matches)
+        #       ),
+        #       .y = purrr::map(w_list_matches, ~ .x[["matrix_show"]]),
+        #       .f = ~ as.character(
+        #         htmltools::div(
+        #           shiny::selectizeInput(inputId = .x,
+        #                                 choices = .y,
+        #                                 label   = NULL,
+        #                                 width   = "90%"),
+        #           style = "height: 30px;"
+        #         )
+        #       )
+        #     ),
+        #     stringsAsFactors = F
+        #   )
+          
+        DT::datatable(
+          df_datatable,
+          escape = FALSE, selection = "none",
+          colnames = c("ID from x", "ID from y?"),
+          options = list(
+            pageLength      = 5,
+            searching       = FALSE,
+            language.emptyTable = "Empty Table",
+            # https://github.com/rstudio/shiny/issues/1246
+            preDrawCallback = htmlwidgets::JS('function() { Shiny.unbindAll(this.api().table().node());}'),
+            drawCallback    = htmlwidgets::JS('function() { Shiny.bindAll(this.api().table().node()); } '))) %>%
+          DT::formatStyle(0, lineHeight='20%')
+        # }
       },
       server = FALSE)
     
@@ -328,13 +370,25 @@ inexact_gadget <- function() {
         
         w_list_matches <- r_w_list_matches()
         
+        message("Cargando datos iniciales para código")
+        
+        df_datatable <- f_df_datatable_inicial(with_id = T)
+        
         if (length(w_list_matches) > 0){
-          v_reviewed_id <- vector("character", length(w_list_matches))
+          # v_reviewed_id <- vector("character", length(w_list_matches))
+          
+          v_reviewed_id <- df_datatable$input_id
+          
+          message(length(v_reviewed_id))
           
           for (i in 1:length(v_reviewed_id)) {
-            v_reviewed_id[[i]] <- eval(parse(text = paste("input$review_", i, sep = "")))
+            # message(eval(parse(text = paste("input$review_", i, sep = ""))))
+            new_value <- eval(parse(text = paste("input$review_", i, sep = "")))
+            if (length(new_value) > 0){
+              v_reviewed_id[[i]] <- new_value
+            }
+            message(v_reviewed_id[[i]])
           }
-          
           df_review <- data.frame(
             orig_id = names(w_list_matches),
             suggested_id = purrr::map_chr(w_list_matches, ~ .x[["matrix_show"]][1]),
