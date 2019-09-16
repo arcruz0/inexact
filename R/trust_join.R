@@ -64,7 +64,10 @@ trust_join <- function (x, y, by, max_dist = Inf, method = c("osa", "lv", "dl",
   }
   
   # set column order appropiately:
-  res <- res %>% dplyr::select(unique(c(colnames(x), colnames(y))))
+  res <- res %>% dplyr::select(!!var_by,
+                               !!var_match, .dist,
+                               setdiff(unique(c(colnames(x), colnames(y))),
+                                       !!var_by))
   
   return(res)
 }
