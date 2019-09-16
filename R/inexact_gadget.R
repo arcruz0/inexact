@@ -240,8 +240,9 @@ inexact_gadget <- function() {
       }
       
       if (num_choices > length(y)){num_choices <- length(y)}
-      
+
       matrix_match <- stringdist::stringdistmatrix(x, y, method = method)
+      
       rownames(matrix_match) <- x; colnames(matrix_match) <- y
       
       res <- vector("list", length = length(x))
@@ -304,7 +305,6 @@ inexact_gadget <- function() {
           
           if (with_id == T) {
             df_datatable$input_id <- map_chr(values_to_show, ~ .x[[1]])
-            message(map_chr(values_to_show, ~ .x[[1]]))
           }
           
           return(df_datatable)
@@ -320,7 +320,6 @@ inexact_gadget <- function() {
         
         # Load the df with suggested matches
         
-        message("Cargando datos iniciales para DT")
         df_datatable <- f_df_datatable_inicial(with_id = F)
         
         # if (is.null(w_list_matches) == T){
@@ -370,8 +369,6 @@ inexact_gadget <- function() {
         
         w_list_matches <- r_w_list_matches()
         
-        message("Cargando datos iniciales para código")
-        
         df_datatable <- f_df_datatable_inicial(with_id = T)
         
         if (length(w_list_matches) > 0){
@@ -379,15 +376,11 @@ inexact_gadget <- function() {
           
           v_reviewed_id <- df_datatable$input_id
           
-          message(length(v_reviewed_id))
-          
           for (i in 1:length(v_reviewed_id)) {
-            # message(eval(parse(text = paste("input$review_", i, sep = ""))))
             new_value <- eval(parse(text = paste("input$review_", i, sep = "")))
             if (length(new_value) > 0){
               v_reviewed_id[[i]] <- new_value
             }
-            message(v_reviewed_id[[i]])
           }
           df_review <- data.frame(
             orig_id = names(w_list_matches),
