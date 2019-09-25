@@ -1,4 +1,4 @@
 Name: Supervised fuzzy join
 Description: Launch a GUI to supervise a fuzzy join.
-Binding: inexact_gadget
+Binding: inexact_addin
 Interactive: true
