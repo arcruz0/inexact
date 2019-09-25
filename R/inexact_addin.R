@@ -6,7 +6,7 @@
 #'
 #' @export
 
-inexact_gadget <- function() {
+inexact_addin <- function() {
   # Function to allow selectize plugins
   # source: https://gist.github.com/saurfang/6684a66601a7e5b6467f
   addUIDep <- function(x) {
@@ -243,7 +243,8 @@ inexact_gadget <- function() {
 
       matrix_match <- stringdist::stringdistmatrix(x, y, method = method)
       
-      rownames(matrix_match) <- x; colnames(matrix_match) <- y
+      rownames(matrix_match) <- x
+      colnames(matrix_match) <- y
       
       res <- vector("list", length = length(x))
       
@@ -254,8 +255,9 @@ inexact_gadget <- function() {
         
         res[[i]] <- list(
           matrix_original = matrix_match_row,
-          matrix_show = paste0("(", matrix_match_row,
+          matrix_show = c(paste0("(", matrix_match_row,
                                ") ", names(matrix_match_row)),
+                          "<NA>"),
           min = min(matrix_match_row)
         )
       }
@@ -304,7 +306,7 @@ inexact_gadget <- function() {
           )
           
           if (with_id == T) {
-            df_datatable$input_id <- map_chr(values_to_show, ~ .x[[1]])
+            df_datatable$input_id <- purrr::map_chr(values_to_show, ~ .x[[1]])
           }
           
           return(df_datatable)
@@ -322,30 +324,6 @@ inexact_gadget <- function() {
         
         df_datatable <- f_df_datatable_inicial(with_id = F)
         
-        # if (is.null(w_list_matches) == T){
-        #   NULL
-        # } else {
-        #   df_datatable <- data.frame(
-        #     id_1 = names(w_list_matches),
-        #     id_2 = purrr::map2_chr(
-        #       .x = stringr::str_c(
-        #         "review_",
-        #         1:length(w_list_matches)
-        #       ),
-        #       .y = purrr::map(w_list_matches, ~ .x[["matrix_show"]]),
-        #       .f = ~ as.character(
-        #         htmltools::div(
-        #           shiny::selectizeInput(inputId = .x,
-        #                                 choices = .y,
-        #                                 label   = NULL,
-        #                                 width   = "90%"),
-        #           style = "height: 30px;"
-        #         )
-        #       )
-        #     ),
-        #     stringsAsFactors = F
-        #   )
-          
         DT::datatable(
           df_datatable,
           escape = FALSE, selection = "none",
@@ -372,16 +350,18 @@ inexact_gadget <- function() {
         df_datatable <- f_df_datatable_inicial(with_id = T)
         
         if (length(w_list_matches) > 0){
-          # v_reviewed_id <- vector("character", length(w_list_matches))
-          
+
           v_reviewed_id <- df_datatable$input_id
           
           for (i in 1:length(v_reviewed_id)) {
             new_value <- eval(parse(text = paste("input$review_", i, sep = "")))
+            
             if (length(new_value) > 0){
               v_reviewed_id[[i]] <- new_value
             }
+            
           }
+          
           df_review <- data.frame(
             orig_id = names(w_list_matches),
             suggested_id = purrr::map_chr(w_list_matches, ~ .x[["matrix_show"]][1]),
@@ -392,7 +372,11 @@ inexact_gadget <- function() {
             dplyr::mutate(agree = dplyr::if_else(suggested_id == reviewed_id, 1, 0)) %>%
             dplyr::filter(agree == 0) %>%
             dplyr::mutate(code_expr = glue::glue("'{orig_id}' = '{reviewed_id_clean}',") %>%
-                            as.character())
+                            as.character()) %>% 
+            dplyr::mutate(code_expr = stringr::str_replace(
+              code_expr, "'<NA>'", "NA"
+            ))
+          
         } else {
           df_review <- NULL
         }
@@ -427,11 +411,10 @@ inexact_gadget <- function() {
           chr_changes <- stringr::str_c(df_review$code_expr, collapse = coll_string) %>%
             stringr::str_remove(",$")
           
-          
           .code_text <- glue::glue(
             "
           # You added custom matches:
-          inexact::trust_join(
+          inexact::inexact_join(
             x  = {input$df_x},
             y  = {input$df_y},
             by = '{input$by_vars}',
@@ -447,7 +430,7 @@ inexact_gadget <- function() {
           .code_text <- glue::glue(
             "
           # You didn't add any custom matches! Let's trust the algorithm:
-          inexact::trust_join(
+          inexact::inexact_join(
             x    = {input$df_x},
             y    = {input$df_y},
             by   = '{input$by_vars}',
