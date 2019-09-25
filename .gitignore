@@ -17,7 +17,7 @@ vignettes/*.pdf
 
 .Rbuildignore
 
-.Rproj
+*.Rproj
 
 PaperInexact/
 pres_latinr2019/
