@@ -78,7 +78,7 @@ inexact_join <- function(x, y, by, max_dist = Inf,
   }
   
   if (output == "data.frame") {
-    return(as.data.table(ret[]))
+    return(data.table::as.data.table(ret[]))
   } else if (output == "data.table"){
     return(ret[])
   } else if (output == "tibble"){
