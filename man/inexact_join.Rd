@@ -6,8 +6,8 @@
 \usage{
 inexact_join(x, y, by, max_dist = Inf, method = c("osa", "lv", "dl",
   "hamming", "lcs", "qgram", "cosine", "jaccard", "jw", "soundex"),
-  mode = "inner", custom_match = NULL, ignore_case = FALSE,
-  match_cols = FALSE, ...)
+  mode = "left", custom_match = NULL, ignore_case = FALSE,
+  match_cols = FALSE, output = "data.frame", ...)
 }
 \description{
 The function allows to provide custom matches.
