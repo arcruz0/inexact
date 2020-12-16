@@ -50,7 +50,7 @@ Consider the following data sets:
     ## 4                           Brazil    14
 
 Imagine that we want to left-join these data sets. In this case, we
-might want to add the “col\_c” column to “data\_a”, in order to have
+might want to add the “col\_b” column to “data\_a”, in order to have
 only one data set with all the information. However, the naming of the
 countries is inconsistent, leading to an incomplete join:
 
