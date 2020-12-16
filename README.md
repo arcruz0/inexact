@@ -10,7 +10,9 @@ like this one. It provides a simple graphical interface, which
 automatically recommends the best matches between the two ID variables
 (using the amazing
 [`stringdist`](https://cran.r-project.org/web/packages/stringdist/index.html)
-package), giving you the chance to override the algorithm when needed.
+package), while also giving you the chance to override the algorithm
+when needed. The result is code to safely and reproducibly perform your
+inexact join\!
 
 ## Installation
 
