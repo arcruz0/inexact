@@ -1,4 +1,4 @@
-`inexact`: an Rstudio addin to supervise fuzzy joins
+`inexact`: an RStudio addin to supervise fuzzy joins
 ================
 
 Merging data sets is everyone’s favorite task. Especially when dealing
