@@ -1,16 +1,27 @@
 `inexact`: an Rstudio addin to supervise fuzzy joins
 ================
 
+Merging data sets is everyone’s favorite task. Especially when dealing
+with data in which ID variables are not standardized. For instance,
+politicians’ names can be spelled differently in multiple sources (press
+reports, official documents, etc.), causing regular merging methods to
+fail. Fun times\! `inexact` aims to help you when dealing with problems
+like this one. It provides a simple graphical interface, which
+automatically recommends the best matches between the two ID variables
+(using the amazing
+[`stringdist`](https://cran.r-project.org/web/packages/stringdist/index.html)
+package), giving you the chance to override the algorithm when needed.
+
 ## Installation
 
-`inexact` is currently in early development. You can install it with the
-following command:
+The package is currently in early development. You can install it with
+the following command:
 
 ``` r
 remotes::install_github("arcruz0/inexact")
 ```
 
-## Usage
+## Explanation and usage
 
 Consider the following data sets:
 
@@ -91,7 +102,7 @@ As illustrated by the following capture, it shows users the inexact
 matches between the two data sets, allowing them to override the
 suggestions by the algorithm when needed.
 
-<img src="inexact.gif" width="50%" style="display: block; margin: auto;" />
+<img src="inexact.gif" width="60%" style="display: block; margin: auto;" />
 
 The result is a reproducible chunk of code to perform the inexact join,
 which registers the employed algorithm and any corrections made by the
