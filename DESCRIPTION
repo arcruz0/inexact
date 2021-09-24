@@ -24,7 +24,5 @@ Imports:
         htmltools,
         htmlwidgets,
         DT,
-        stringdist,
-        fuzzyjoin,
-        rlang
+        stringdist
 RoxygenNote: 6.1.1
