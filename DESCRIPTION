@@ -6,7 +6,7 @@ Authors@R:
     person(given = "Andrés",
            family = "Cruz",
            role = c("aut", "cre"),
-           email = "arcruz@uc.cl")
+           email = "andres.cruz@utexas.edu")
 Description: The package allows to supervise a fuzzy join, via an RStudio Addin.
 License: GPL-3
 Encoding: UTF-8
