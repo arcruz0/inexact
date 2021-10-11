@@ -90,6 +90,14 @@ inexact_addin <- function() {
             htmltools::div(
               style = "padding-left: 1em; padding-right: 1em;",
               shiny::fluidRow(
+                shiny::checkboxInput("checkbox_clipboard",
+                                     "Copy to clipboard after clicking 'Done'", 
+                                     value = T)
+              )
+            ),
+            htmltools::div(
+              style = "padding-left: 1em; padding-right: 1em;",
+              shiny::fluidRow(
                 shiny::checkboxInput("checkbox_match_cols",
                                      "Keep matching columns in final data frame")
               )
@@ -100,7 +108,7 @@ inexact_addin <- function() {
                 shiny::htmlOutput("ui_code")
               )
             ),
-            flex = c(1.5, 8.5)
+            flex = c(1.5, 1.5, 7)
           )
         )
       )
@@ -109,6 +117,7 @@ inexact_addin <- function() {
   
   server <- function(input, output, session) {
     
+    r_checkbox_clipboard <- shiny::reactive({input$checkbox_clipboard})
     
     # The Done button closes the app
     shiny::observeEvent(
@@ -126,6 +135,11 @@ inexact_addin <- function() {
             )
           )
         ))
+        
+        if (r_checkbox_clipboard()){
+          clipr::write_clip(stringr::str_replace_all(.code_text, '&nbsp;', ' '))
+        }
+        
         shiny::stopApp()
       }
     )
@@ -340,7 +354,7 @@ inexact_addin <- function() {
       },
       server = FALSE)
     
-    r_checkbox <- shiny::reactive({input$checkbox_match_cols})
+    r_checkbox_match_cols <- shiny::reactive({input$checkbox_match_cols})
     
     output$ui_code <- shiny::renderUI(
       if (shiny::isTruthy(input$df_x) & shiny::isTruthy(input$df_y)) {
@@ -385,13 +399,13 @@ inexact_addin <- function() {
         
         chr_dplyr_join <- stringr::str_c(input$join_type, "_join")
         
-        r_checkbox2 <- r_checkbox()
+        r_checkbox_match_cols2 <- r_checkbox_match_cols()
         
         code_show_cols <- ""
         
-        if (r_checkbox2 == F) {
+        if (r_checkbox_match_cols2 == F) {
           code_show_cols <- ""
-        } else if (r_checkbox2 == T) {
+        } else if (r_checkbox_match_cols2 == T) {
           code_show_cols <- stringr::str_c(",\n", strrep(" ", 2), "match_cols = T")
         }
         

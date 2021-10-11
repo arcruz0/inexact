@@ -14,16 +14,21 @@ inexact_join <- function(x, y, by, max_dist = Inf,
                          mode = "left", custom_match = NULL, ignore_case = FALSE, 
                          match_cols = FALSE, output = "data.frame",
                          ...) {
+  # convert data frames to data.tables 
   dt_x <- data.table::as.data.table(x); dt_y <- data.table::as.data.table(y)
   
-  v_x <- unique(dt_x[, get(by)]); v_y <- unique(dt_y[, get(by)])
+  # get unique values in both ID variables
+  v_unique_ids_x <- unique(dt_x[[by]]); v_unique_ids_y <- unique(dt_y[[by]])
   
-  st <- stringdist::stringdistmatrix(a = v_x, b = v_y, useNames = T, ...)
+  # calculate string distances as a matrix
+  st <- stringdist::stringdistmatrix(
+    a = v_unique_ids_x, b = v_unique_ids_y, useNames = T, ...
+  )
   
   f_min_matrix <- function(x){colnames(st)[which(x == min(x) & x <= max_dist)[1]]}
   
   dt_st <- data.table::data.table(
-    orig = v_x, 
+    orig = v_unique_ids_x, 
     rep  = as.vector(apply(st, 1, f_min_matrix)),
     .dist = apply(st, 1, min)
   )

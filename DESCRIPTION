@@ -24,5 +24,6 @@ Imports:
         htmltools,
         htmlwidgets,
         DT,
-        stringdist
+        stringdist,
+        clipr
 RoxygenNote: 6.1.1
