@@ -3,7 +3,7 @@
 
 ## TL;DR
 
-Merge data sets with inexact ID variables! Get help from (and supervise) an automated algorithm.
+Merge data sets with inexact ID variables! Get help from an automated algorithm and supervise its results.
 
 <img src="inexact.gif" width="65%" style="display: block; margin: auto;" />
 
