@@ -1,6 +1,14 @@
 `inexact`: an RStudio addin to supervise fuzzy joins
 ================
 
+## TL;DR
+
+Merge data sets with inexact ID variables! Getting help from (and supervising) an approximate string matching algorithm.
+
+<img src="inexact.gif" width="60%" style="display: block; margin: auto;" />
+
+## Introduction
+
 Merging data sets is everyone’s favorite task. Especially when dealing
 with data in which ID variables are not standardized. For instance,
 politicians’ names can be spelled differently in multiple sources (press
@@ -100,11 +108,9 @@ benefit from human supervision.
 
 This is when `inexact` can be helpful. It is called from the RStudio
 “Addins” panel, or by using the `inexact:::inexact_addin()` command.
-As illustrated by the following capture, it shows users the inexact
+As illustrated by the GIF above, it shows users the inexact
 matches between the two data sets, allowing them to override the
 suggestions by the algorithm when needed.
-
-<img src="inexact.gif" width="60%" style="display: block; margin: auto;" />
 
 The result is a reproducible chunk of code to perform the inexact join,
 which registers the employed algorithm and any corrections made by the
