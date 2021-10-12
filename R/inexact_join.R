@@ -82,11 +82,14 @@ inexact_join <- function(x, y, by, max_dist = Inf,
   }
   
   if (output == "data.frame") {
-    return(data.table::as.data.table(ret[]))
+    return(as.data.frame(ret[]))
   } else if (output == "data.table"){
     return(ret[])
-  } else if (output == "tibble"){
+  } else if (output == "tibble" & requireNamespace("tibble", quietly = TRUE)){
     return(tibble::as_tibble(ret[]))
+  } else if (output == "tibble" & !requireNamespace("tibble", quietly = TRUE)){
+    warning("Package 'tibble' not installed. Returning a 'data.frame' instead.")
+    return(as.data.frame(ret[]))
   } else {
     stop("Invalid 'output' argument. Valid options are 'data.frame' (default), 'data.table' and 'tibble'.")
   }

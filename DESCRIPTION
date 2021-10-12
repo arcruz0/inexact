@@ -13,8 +13,6 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
         data.table,
-        tibble,
-        tidyr,
         purrr,
         stringr,
         glue,
@@ -25,4 +23,6 @@ Imports:
         DT,
         stringdist,
         clipr
+Suggests:
+        tibble
 RoxygenNote: 7.1.1
