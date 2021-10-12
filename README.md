@@ -5,7 +5,7 @@
 
 Merge data sets with inexact ID variables! Get help from (and supervise) an automated algorithm.
 
-<img src="inexact.gif" width="60%" style="display: block; margin: auto;" />
+<img src="inexact.gif" width="65%" style="display: block; margin: auto;" />
 
 ## Introduction
 
