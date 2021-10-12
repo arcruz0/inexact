@@ -4,10 +4,20 @@
 \alias{inexact_join}
 \title{Performs a fuzzy (inexact) join, trusting the algorithm by default.}
 \usage{
-inexact_join(x, y, by, max_dist = Inf, method = c("osa", "lv", "dl",
-  "hamming", "lcs", "qgram", "cosine", "jaccard", "jw", "soundex"),
-  mode = "left", custom_match = NULL, ignore_case = FALSE,
-  match_cols = FALSE, output = "data.frame", ...)
+inexact_join(
+  x,
+  y,
+  by,
+  max_dist = Inf,
+  method = c("osa", "lv", "dl", "hamming", "lcs", "qgram", "cosine", "jaccard", "jw",
+    "soundex"),
+  mode = "left",
+  custom_match = NULL,
+  ignore_case = FALSE,
+  match_cols = FALSE,
+  output = "data.frame",
+  ...
+)
 }
 \description{
 The function allows to provide custom matches.

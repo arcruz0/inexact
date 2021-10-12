@@ -2,7 +2,7 @@
 #'
 #' This function launches a GUI to supervise a fuzzy join.
 #'
-#' @importFrom dplyr "%>%"
+#' @importFrom stringr "%>%"
 #'
 #' @export
 
@@ -239,15 +239,12 @@ inexact_addin <- function() {
     )
     
     f_w_list_matches <- function(x, y, by, method, num_choices) {
-      x <- eval(parse(text = paste(
-        "dplyr::distinct(dplyr::select(", x, ", ", by, "))")))
-      x <- x[[by]]
       
-      y <- eval(parse(text = paste(
-        "dplyr::distinct(dplyr::select(", y, ", ", by, "))")))
-      y <- y[[by]]
+      x <- eval(parse(text = x)); y <- eval(parse(text = y))
       
-      x <- x[!(x %in% y)]
+      x <- unique(x[[by]]); y <- unique(y[[by]])
+      
+      x <- setdiff(x, y)
       
       if (identical(x, character(0))){
         return(NULL)
@@ -376,21 +373,18 @@ inexact_addin <- function() {
             
           }
           
-          df_review <- data.frame(
+          df_review <- data.table::data.table(
             orig_id = names(w_list_matches),
             suggested_id = purrr::map_chr(w_list_matches, ~ .x[["matrix_show"]][1]),
             reviewed_id = v_reviewed_id,
             reviewed_id_clean = stringr::str_remove(v_reviewed_id, "^\\(\\d+\\)\\s"),
             stringsAsFactors = F
           ) %>%
-            dplyr::mutate(agree = dplyr::if_else(suggested_id == reviewed_id, 1, 0)) %>%
-            dplyr::filter(agree == 0) %>%
-            dplyr::mutate(code_expr = glue::glue("'{orig_id}' = '{reviewed_id_clean}',") %>%
-                            as.character()) %>% 
-            dplyr::mutate(code_expr = stringr::str_replace(
-              code_expr, "'<NA>'", "NA"
-            ))
-          
+            .[, agree := data.table::fifelse(suggested_id == reviewed_id, 1, 0)] %>% 
+            .[agree == 0] %>% 
+            .[, code_expr := stringr::str_c("\"", orig_id, "\" = \"", reviewed_id_clean, "\",")] %>%
+            .[, code_expr := stringr::str_replace(code_expr, "\"<NA>\"", "NA")]
+        
         } else {
           df_review <- NULL
         }

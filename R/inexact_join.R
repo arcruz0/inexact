@@ -2,7 +2,6 @@
 #'
 #' The function allows to provide custom matches.
 #'
-#' @importFrom dplyr "%>%"
 #' @importFrom data.table "%chin%"
 #'
 #' @export

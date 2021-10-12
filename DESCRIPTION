@@ -12,7 +12,6 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: 
-        dplyr,
         data.table,
         tibble,
         tidyr,
@@ -26,4 +25,4 @@ Imports:
         DT,
         stringdist,
         clipr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
