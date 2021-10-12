@@ -410,7 +410,7 @@ inexact_addin <- function() {
           dplyr::{chr_dplyr_join}(
             x  = {input$df_x},
             y  = {input$df_y},
-            by = '{input$by_vars}'
+            by = \"{input$by_vars}\"
           )
           ")
         } else if (nrow(df_review) > 0) {
@@ -425,9 +425,9 @@ inexact_addin <- function() {
           inexact::inexact_join(
             x  = {input$df_x},
             y  = {input$df_y},
-            by = '{input$by_vars}',
-            method = '{input$dist_alg}',
-            mode = '{input$join_type}',
+            by = \"{input$by_vars}\",
+            method = \"{input$dist_alg}\",
+            mode = \"{input$join_type}\",
             custom_match = c(
              {chr_changes}
             ){code_show_cols}
@@ -441,9 +441,9 @@ inexact_addin <- function() {
           inexact::inexact_join(
             x    = {input$df_x},
             y    = {input$df_y},
-            by   = '{input$by_vars}',
-            method = '{input$dist_alg}',
-            mode = '{input$join_type}'{code_show_cols}
+            by   = \"{input$by_vars}\",
+            method = \"{input$dist_alg}\",
+            mode = \"{input$join_type}\"{code_show_cols}
           )
             "
           )
