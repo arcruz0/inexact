@@ -373,6 +373,13 @@ inexact_addin <- function() {
             
           }
           
+          chr_type_na <- switch(class(get(input$df_x)[[input$by_vars]]),
+            numeric = "NA_real_",
+            character = "NA_character_", 
+            integer   = "NA_integer",
+            "NA"
+          )
+          
           df_review <- data.table::data.table(
             orig_id = names(w_list_matches),
             suggested_id = purrr::map_chr(w_list_matches, ~ .x[["matrix_show"]][1]),
@@ -383,7 +390,7 @@ inexact_addin <- function() {
             .[, agree := data.table::fifelse(suggested_id == reviewed_id, 1, 0)] %>% 
             .[agree == 0] %>% 
             .[, code_expr := stringr::str_c("\"", orig_id, "\" = \"", reviewed_id_clean, "\",")] %>%
-            .[, code_expr := stringr::str_replace(code_expr, "\"<NA>\"", "NA")]
+            .[, code_expr := stringr::str_replace(code_expr, "\"<NA>\"", chr_type_na)]
         
         } else {
           df_review <- NULL
