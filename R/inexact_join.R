@@ -53,7 +53,6 @@ inexact_join <- function(x, y, by, max_dist = Inf,
       all.x = T, sort = F
     )
     
-    # don't forget to add: https://stackoverflow.com/a/27979637
     dt_st[orig %chin% dt_custom_match[, orig],] <- dt_custom_match
   }
   
