@@ -11,7 +11,7 @@ inexact_join <- function(x, y, by, max_dist = Inf,
                                     "qgram", "cosine", "jaccard", "jw", 
                                     "soundex"), 
                          mode = "left", custom_match = NULL, ignore_case = FALSE, 
-                         match_cols = FALSE, output = NULL,
+                         match_cols = FALSE, output = "auto",
                          ...) {
   # convert data frames to data.tables
   class_original_x <- class(x)
