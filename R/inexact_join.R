@@ -11,9 +11,10 @@ inexact_join <- function(x, y, by, max_dist = Inf,
                                     "qgram", "cosine", "jaccard", "jw", 
                                     "soundex"), 
                          mode = "left", custom_match = NULL, ignore_case = FALSE, 
-                         match_cols = FALSE, output = "data.frame",
+                         match_cols = FALSE, output = NULL,
                          ...) {
-  # convert data frames to data.tables 
+  # convert data frames to data.tables
+  class_original_x <- class(x)
   dt_x <- data.table::as.data.table(x); dt_y <- data.table::as.data.table(y)
   
   # get unique values in both ID variables
@@ -80,17 +81,15 @@ inexact_join <- function(x, y, by, max_dist = Inf,
     ret <- ret[, !c(".match", ".dist", ".custom_match")]
   }
   
-  if (output == "data.frame") {
-    return(as.data.frame(ret[]))
-  } else if (output == "data.table"){
+  if (output == "data.table" | "data.table" %in% class_original_x){
     return(ret[])
-  } else if (output == "tibble" & requireNamespace("tibble", quietly = TRUE)){
+  } else if ((output == "tibble" | "tibble" %in% class_original_x) & requireNamespace("tibble", quietly = TRUE)){
     return(tibble::as_tibble(ret[]))
-  } else if (output == "tibble" & !requireNamespace("tibble", quietly = TRUE)){
+  } else if ((output == "tibble" | "tibble" %in% class_original_x) & !requireNamespace("tibble", quietly = TRUE)){
     warning("Package 'tibble' not installed. Returning a 'data.frame' instead.")
     return(as.data.frame(ret[]))
   } else {
-    stop("Invalid 'output' argument. Valid options are 'data.frame' (default), 'data.table' and 'tibble'.")
+    return(as.data.frame(ret[]))
   }
   
 }
