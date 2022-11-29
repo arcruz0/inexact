@@ -22,7 +22,7 @@ inexact_join <- function(x, y, by, max_dist = Inf,
   
   # calculate string distances as a matrix
   st <- stringdist::stringdistmatrix(
-    a = v_unique_ids_x, b = v_unique_ids_y, useNames = T, ...
+    a = v_unique_ids_x, b = v_unique_ids_y, useNames = T, method = method, ...
   )
   
   f_min_matrix <- function(x){colnames(st)[which(x == min(x) & x <= max_dist)[1]]}
